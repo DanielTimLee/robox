@@ -33,7 +33,7 @@ autoinstall:
           Acquire::AllowReleaseInfoChange::Codename "true"; 
   storage:
       layout:
-          name: lvm
+          name: direct 
   identity:
       username: root
       hostname: ubuntu2110.localdomain
@@ -71,8 +71,10 @@ autoinstall:
     - printf "\n91.189.91.124 old-releases.ubuntu.com\n" >> /etc/hosts
     - systemctl restart systemd-resolved
   late-commands:
-    - sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)"$/GRUB_CMDLINE_LINUX_DEFAULT=="\1 net.ifnames=0 biosdevname=0"/g' /target/etc/default/grub
+    - sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)"$/GRUB_CMDLINE_LINUX_DEFAULT=="\1 net.ifnames=0 biosdevname=0 earlyprintk console=ttyS0"/g' /target/etc/default/grub
     - sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT=" net.ifnames/GRUB_CMDLINE_LINUX_DEFAULT="net.ifnames/g' /target/etc/default/grub
+    - echo 'GRUB_TERMINAL="console serial"' >> /target/etc/default/grub
+    - echo 'GRUB_HIDDEN_TIMEOUT=0' >> /target/etc/default/grub
     - echo "PermitRootLogin yes" >> /target/etc/ssh/sshd_config
     - sudo chroot /target /bin/bash -c '/usr/sbin/useradd --create-home --shell /bin/bash --password vagrant vagrant'
     - sudo chroot /target /bin/bash -c 'printf "vagrant\nvagrant\n" | passwd root'

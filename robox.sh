@@ -252,7 +252,7 @@ REPOS+=( "https://mirrors.edge.kernel.org/alpine/v3.18/main/aarch64/APKINDEX.tar
 REPOS+=( "https://mirrors.edge.kernel.org/alpine/v3.18/community/x86_64/APKINDEX.tar.gz" )
 REPOS+=( "https://mirrors.edge.kernel.org/alpine/v3.18/community/aarch64/APKINDEX.tar.gz" )
 
-# Alpine 3.19 
+# Alpine 3.19
 REPOS+=( "https://mirrors.edge.kernel.org/alpine/v3.19/main/x86_64/APKINDEX.tar.gz" )
 REPOS+=( "https://mirrors.edge.kernel.org/alpine/v3.19/main/aarch64/APKINDEX.tar.gz" )
 REPOS+=( "https://mirrors.edge.kernel.org/alpine/v3.19/community/x86_64/APKINDEX.tar.gz" )
@@ -911,8 +911,9 @@ REPOS+=( "https://mirrors.edge.kernel.org/ubuntu/dists/lunar/InRelease" )
 REPOS+=( "https://mirrors.edge.kernel.org/ubuntu/dists/mantic/InRelease" )
 
 # Ubuntu 24.04 (Unkown Unkown)
+REPOS+=( "https://mirrors.edge.kernel.org/ubuntu/dists/noble/InRelease" )
 # This means the 24.04 ISO is available.
-FUTURE+=( "https://releases.ubuntu.com/24.04/ubuntu-24.04-live-server-amd64.iso" )
+# FUTURE+=( "https://releases.ubuntu.com/24.04/ubuntu-24.04-live-server-amd64.iso" )
 
 # https://wiki.ubuntu.com/Releases
 # This means the 24.04 repository is available.
@@ -1058,12 +1059,12 @@ function start() {
   if [ -f /usr/lib/systemd/system/vboxweb-service.service ]; then sudo systemctl restart vboxweb-service.service ; fi
   if [ -f /usr/lib/systemd/system/vboxautostart-service.service ]; then sudo systemctl restart vboxautostart-service.service ; fi
   if [ -f /usr/lib/systemd/system/libvirtd.service ]; then sudo systemctl restart libvirtd.service ; fi
-    
-  if [ -f /usr/lib/systemd/system/podman.service ]; then 
-    sudo systemctl restart podman.service ; 
-  elif [ -f /usr/lib/systemd/system/io.podman.service ]; then 
-    sudo systemctl restart io.podman.service ; 
-  elif [ -f /usr/lib/systemd/system/docker-storage-setup.service ] && [ -f /usr/lib/systemd/system/docker.service ]; then 
+
+  if [ -f /usr/lib/systemd/system/podman.service ]; then
+    sudo systemctl restart podman.service ;
+  elif [ -f /usr/lib/systemd/system/io.podman.service ]; then
+    sudo systemctl restart io.podman.service ;
+  elif [ -f /usr/lib/systemd/system/docker-storage-setup.service ] && [ -f /usr/lib/systemd/system/docker.service ]; then
     sudo systemctl restart docker-storage-setup.service
     sudo systemctl restart docker.service
   elif [ -f /usr/lib/systemd/system/docker.service ]; then
@@ -1094,7 +1095,7 @@ function start() {
   #   sudo /usr/bin/cpupower set -b 0
   #   sudo /usr/bin/cpupower info
   # fi
-  
+
   # if [ -f /sys/kernel/mm/ksm/run ]; then
   #   echo 1 | sudo tee /sys/kernel/mm/ksm/run > /dev/null
   # fi
@@ -1170,7 +1171,7 @@ function iso() {
     return 0
 
   elif [ "$1" == "fedora-a64" ]; then
-  
+
     # Find the existing Fedora Rawhide URL and hash values.
     ISO_URL=`cat "$BASE/packer-cache-a64.json" | jq -r -c ".builders[] | select( .name == \"fedora-rawhide-a64\" ) | .iso_url" 2>/dev/null`
     ISO_CHECKSUM=`cat "$BASE/packer-cache-a64.json" | jq  -r -c ".builders[] | select( .name == \"fedora-rawhide-a64\" ) | .iso_checksum" 2>/dev/null`
@@ -1228,7 +1229,7 @@ function iso() {
       return 1
     fi
 
-    # Extract the ISO name from the PGP signature file, and print a warning if it doesn't match. 
+    # Extract the ISO name from the PGP signature file, and print a warning if it doesn't match.
     LATEST="$(${CURL} --fail --silent --location ${URL}/latest-install-amd64-minimal.txt | \
     head -n $(${CURL} --fail --silent --location ${URL}/latest-install-amd64-minimal.txt | grep '\-----BEGIN PGP SIGNATURE-----' -n | head -1 | awk -F':' '{print $1-1}') | \
     tail -n +$(${CURL} --fail --silent --location ${URL}/latest-install-amd64-minimal.txt | head -n $(${CURL} --fail --silent --location ${URL}/latest-install-amd64-minimal.txt | grep '\-----BEGIN PGP SIGNATURE-----' -n | head -1 | awk -F':' '{print $1}') | grep -En '^$'| head -1 | awk -F':' '{print $1+1}') | \
@@ -1280,7 +1281,7 @@ function iso() {
       return 1
     fi
 
-    # Extract the ISO name from the PGP signature file, and print a warning if it doesn't match. 
+    # Extract the ISO name from the PGP signature file, and print a warning if it doesn't match.
     LATEST="$(${CURL} --fail --silent --location ${URL}/latest-install-arm64-minimal.txt | \
     head -n $(${CURL} --fail --silent --location ${URL}/latest-install-arm64-minimal.txt | grep '\-----BEGIN PGP SIGNATURE-----' -n | head -1 | awk -F':' '{print $1-1}') | \
     tail -n +$(${CURL} --fail --silent --location ${URL}/latest-install-arm64-minimal.txt | head -n $(${CURL} --fail --silent --location ${URL}/latest-install-arm64-minimal.txt | grep '\-----BEGIN PGP SIGNATURE-----' -n | head -1 | awk -F':' '{print $1}') | grep -En '^$'| head -1 | awk -F':' '{print $1+1}') | \
@@ -1355,7 +1356,7 @@ function iso() {
     return 0
 
   elif [ "$1" == "centos8s" ]; then
-    
+
     # Find the existing CentOS 8 stream URL and hash values.
     ISO_URL=`cat "$BASE/packer-cache-x64.json" | jq -r -c ".builders[] | select( .name == \"centos8s-x64\" ) | .iso_url" 2>/dev/null`
     ISO_CHECKSUM=`cat "$BASE/packer-cache-x64.json" | jq  -r -c ".builders[] | select( .name == \"centos8s-x64\" ) | .iso_checksum" 2>/dev/null`
@@ -1367,7 +1368,7 @@ function iso() {
 
     # Find the CentOS 8 stream URL. For some reason the kernel.org mirror is having issues. Using an alternate.
     # URL="https://mirrors.edge.kernel.org/centos/8-stream/isos/x86_64/"
-    URL="https://mirror.leaseweb.net/centos/8-stream/isos/x86_64/" 
+    URL="https://mirror.leaseweb.net/centos/8-stream/isos/x86_64/"
     ISO=`${CURL} --fail --silent "${URL}" | grep --invert-match "iso\.manifest" | grep --extended-regexp --only-matching "CentOS\-Stream\-8\-[0-9\.]*\-x86\_64\-boot\.iso" | sort -V | uniq | tail -1`
     if [ $? != 0 ] || [ "$ISO" == "" ]; then
       tput setaf 1; printf "\nThe CentOS 8 stream ISO update failed.\n\n"; tput sgr0
@@ -1393,7 +1394,7 @@ function iso() {
     # Replace the existing ISO and hash values with the update values.
     sed --in-place "s/$ISO_URL/$URL/g" $ROBOX_FILES
     sed --in-place "s/$ISO_CHECKSUM/sha256:$SHA/g" $ROBOX_FILES
-    
+
     return 0
 
   elif [ "$1" == "centos9s" ]; then
@@ -1450,16 +1451,16 @@ function iso() {
 
     # Find the HardenedBSD URL.
     # URL="https://installers.hardenedbsd.org/pub/13-stable/amd64/amd64/installer"
-    
+
     # Alternate server.
     URL="https://mirror.laylo.nl/pub/hardenedbsd/13-stable/amd64/amd64/installer"
-    
+
     # Old method, where we use sort the directory listing for the latest build.
     # BUILD=`curl --fail --silent "${URL}" | grep --extended-regexp --only-matching "\"build\-[0-9]*/\"" | grep --extended-regexp --only-matching "[0-9]*" | sort -n -r | uniq | head -1`
 
     # New method, which relies on the index.txt file telling us the latest build number.
     BUILD=`${CURL} --fail --silent "${URL}/index.txt" | grep --extended-regexp --only-matching "[0-9]*" | sort -n -r | head -1`
-    
+
     if [ $? != 0 ] || [ "$BUILD" == "" ]; then
       tput setaf 1; printf "\nThe HardenedBSD ISO updates failed.\n\n"; tput sgr0
       return 1
@@ -1500,16 +1501,16 @@ function iso() {
 
     # Find the HardenedBSD URL.
     # URL="https://installers.hardenedbsd.org/pub/14-stable/amd64/amd64/installer"
-    
+
     # Alternate server.
     URL="https://mirror.laylo.nl/pub/hardenedbsd/14-stable/amd64/amd64/installer"
-    
+
     # Old method, where we use sort the directory listing for the latest build.
     # BUILD=`curl --fail --silent "${URL}" | grep --extended-regexp --only-matching "\"build\-[0-9]*/\"" | grep --extended-regexp --only-matching "[0-9]*" | sort -n -r | uniq | head -1`
 
     # New method, which relies on the index.txt file telling us the latest build number.
     BUILD=`${CURL} --fail --silent "${URL}/index.txt" | grep --extended-regexp --only-matching "[0-9]*" | sort -n -r | head -1`
-    
+
     if [ $? != 0 ] || [ "$BUILD" == "" ]; then
       tput setaf 1; printf "\nThe HardenedBSD ISO updates failed.\n\n"; tput sgr0
       return 1
@@ -1539,9 +1540,9 @@ function iso() {
 
   elif [ "$1" == "alpine" ]; then
 
-    # Build a loop with all of the Alpine ISO names. 
-    cat "$BASE/packer-cache-a64.json" "$BASE/packer-cache-x64.json" | jq -r -c ".builders[] | select( .name | contains(\"alpine\" )) | .name" | grep -v alpine35-hyperv-x64 | while read NAME; do 
-      
+    # Build a loop with all of the Alpine ISO names.
+    cat "$BASE/packer-cache-a64.json" "$BASE/packer-cache-x64.json" | jq -r -c ".builders[] | select( .name | contains(\"alpine\" )) | .name" | grep -v alpine35-hyperv-x64 | while read NAME; do
+
       ISO_URL=`cat "$BASE/packer-cache-a64.json" "$BASE/packer-cache-x64.json" | jq -r -c ".builders[] | select( .name == \"$NAME\" ) | .iso_url" 2>/dev/null`
       ISO_CHECKSUM=`cat "$BASE/packer-cache-a64.json" "$BASE/packer-cache-x64.json" | jq  -r -c ".builders[] | select( .name == \"$NAME\" ) | .iso_checksum" 2>/dev/null`
 
@@ -1554,7 +1555,7 @@ function iso() {
       URL="$(echo $ISO_URL | perl -pe 's/^((.*\d+\.)*)(\d+)(.*)$/$1.($3+1).$4/e')"
       ISO=`${CURL} --fail --head --silent --location --output /dev/null --write-out "%{exitcode}" "${URL}"`
       if [ "$ISO" == "0" ]; then
-        
+
         # Download the ISO file and calculate the new hash value.
         set -o pipefail
         SHA=`${CURL} --fail --speed-time 60 --speed-limit 1024 --silent --location "${URL}" | sha256sum | awk -F' ' '{print $1}'`
@@ -1605,45 +1606,45 @@ function cache() {
   [ ! -n "$CACHE_JOBS" ] && export CACHE_JOBS=$PACKER_MAX_PROCS
   [ ! -n "$CACHE_JOBS" ] && export CACHE_JOBS=1
 
-  unset PACKER_LOG ; unset LD_PRELOAD ; unset LD_LIBRARY_PATH ; unset PACKER_MAX_PROCS ; unset GOMAXPROCS ; 
+  unset PACKER_LOG ; unset LD_PRELOAD ; unset LD_LIBRARY_PATH ; unset PACKER_MAX_PROCS ; unset GOMAXPROCS ;
 
   if [ "$1" == "x64" ]; then
-    ( sudo renice -n +19 $BASHPID &>/dev/null || echo '' &>/dev/null ; sudo ionice -c 3 $BASHPID &>/dev/null || echo '' &>/dev/null ; 
+    ( sudo renice -n +19 $BASHPID &>/dev/null || echo '' &>/dev/null ; sudo ionice -c 3 $BASHPID &>/dev/null || echo '' &>/dev/null ;
       cat "$BASE/packer-cache-x64.json" | jq -r '.builders[] | .name | @text'| sort -V | parallel --ungroup -j $CACHE_JOBS --xapply \
       packer build -only="{1}" "$BASE/packer-cache-x64.json" 2>&1 | \
       grep --line-buffered -oE ".*: Trying.*| \=\>.*|.*: Download failed.*|.*: error downloading.*|^Build .*error.*" | \
       grep --line-buffered -Ev 'checksum=sha25|Error creating disk' | sed --unbuffered 's/==/ =/g' | sed --unbuffered 's/vmware\-iso\.//g' ; tput sgr0 )
       return 0
   elif [ "$1" == "x32" ]; then
-    ( sudo renice -n +19 $BASHPID &>/dev/null || echo '' &>/dev/null ; sudo ionice -c 3 $BASHPID &>/dev/null || echo '' &>/dev/null ; 
+    ( sudo renice -n +19 $BASHPID &>/dev/null || echo '' &>/dev/null ; sudo ionice -c 3 $BASHPID &>/dev/null || echo '' &>/dev/null ;
       cat "$BASE/packer-cache-x32.json" | jq -r '.builders[] | .name | @text'| sort -V | parallel --ungroup -j $CACHE_JOBS --xapply \
       packer build -only="{1}" "$BASE/packer-cache-x32.json" 2>&1 | \
       grep --line-buffered -oE ".*: Trying.*| \=\>.*|.*: Download failed.*|.*: error downloading.*|^Build .*error.*" | \
       grep --line-buffered -Ev 'checksum=sha25|Error creating disk' | sed --unbuffered 's/==/ =/g' | sed --unbuffered 's/vmware\-iso\.//g' ; tput sgr0 )
       return 0
   elif [ "$1" == "a64" ]; then
-    ( sudo renice -n +19 $BASHPID &>/dev/null || echo '' &>/dev/null ; sudo ionice -c 3 $BASHPID &>/dev/null || echo '' &>/dev/null ; 
+    ( sudo renice -n +19 $BASHPID &>/dev/null || echo '' &>/dev/null ; sudo ionice -c 3 $BASHPID &>/dev/null || echo '' &>/dev/null ;
       cat "$BASE/packer-cache-a64.json" | jq -r '.builders[] | .name | @text'| sort -V | parallel --ungroup -j $CACHE_JOBS --xapply \
       packer build -only="{1}" "$BASE/packer-cache-a64.json" 2>&1 | \
       grep --line-buffered -oE ".*: Trying.*| \=\>.*|.*: Download failed.*|.*: error downloading.*|^Build .*error.*" | \
       grep --line-buffered -Ev 'checksum=sha25|Error creating disk' | sed --unbuffered 's/==/ =/g' | sed --unbuffered 's/vmware\-iso\.//g' ; tput sgr0 )
       return 0
   elif [ "$1" == "a32" ]; then
-    ( sudo renice -n +19 $BASHPID &>/dev/null || echo '' &>/dev/null ; sudo ionice -c 3 $BASHPID &>/dev/null || echo '' &>/dev/null ; 
+    ( sudo renice -n +19 $BASHPID &>/dev/null || echo '' &>/dev/null ; sudo ionice -c 3 $BASHPID &>/dev/null || echo '' &>/dev/null ;
       cat "$BASE/packer-cache-x32.json" | jq -r '.builders[] | .name | @text'| sort -V | parallel --ungroup -j $CACHE_JOBS --xapply \
       packer build -only="{1}" "$BASE/packer-cache-a32.json" 2>&1 | \
       grep --line-buffered -oE ".*: Trying.*| \=\>.*|.*: Download failed.*|.*: error downloading.*|^Build .*error.*" | \
       grep --line-buffered -Ev 'checksum=sha25|Error creating disk' | sed --unbuffered 's/==/ =/g' | sed --unbuffered 's/vmware\-iso\.//g' ; tput sgr0 )
       return 0
   elif [ "$1" == "p64" ]; then
-    ( sudo renice -n +19 $BASHPID &>/dev/null || echo '' &>/dev/null ; sudo ionice -c 3 $BASHPID &>/dev/null || echo '' &>/dev/null ; 
+    ( sudo renice -n +19 $BASHPID &>/dev/null || echo '' &>/dev/null ; sudo ionice -c 3 $BASHPID &>/dev/null || echo '' &>/dev/null ;
       cat "$BASE/packer-cache-p64.json" | jq -r '.builders[] | .name | @text'| sort -V | parallel --ungroup -j $CACHE_JOBS --xapply \
       packer build -only="{1}" "$BASE/packer-cache-p64.json" 2>&1 | \
       grep --line-buffered -oE ".*: Trying.*| \=\>.*|.*: Download failed.*|.*: error downloading.*|^Build .*error.*" | \
       grep --line-buffered -Ev 'checksum=sha25|Error creating disk' | sed --unbuffered 's/==/ =/g' | sed --unbuffered 's/vmware\-iso\.//g' ; tput sgr0 )
       return 0
   elif [ "$1" == "m64" ]; then
-    ( sudo renice -n +19 $BASHPID &>/dev/null || echo '' &>/dev/null ; sudo ionice -c 3 $BASHPID &>/dev/null || echo '' &>/dev/null ; 
+    ( sudo renice -n +19 $BASHPID &>/dev/null || echo '' &>/dev/null ; sudo ionice -c 3 $BASHPID &>/dev/null || echo '' &>/dev/null ;
       cat "$BASE/packer-cache-m64.json" | jq -r '.builders[] | .name | @text'| sort -V | parallel --ungroup -j $CACHE_JOBS --xapply \
       packer build -only="{1}" "$BASE/packer-cache-m64.json" 2>&1 | \
       grep --line-buffered -oE ".*: Trying.*| \=\>.*|.*: Download failed.*|.*: error downloading.*|^Build .*error.*" | \
@@ -1745,10 +1746,10 @@ function verify_json() {
   else
     PACKER="packer"
   fi
-  
+
   ${PACKER} validate $1.json &>/dev/null || \
-  { 
-    tput setaf 1 ; tput bold ; printf "The $1.json file failed to validate.\n" ; tput sgr0 ; 
+  {
+    tput setaf 1 ; tput bold ; printf "The $1.json file failed to validate.\n" ; tput sgr0 ;
     ${PACKER} validate $1.json 2>&1 | grep --color=none -B 1 -A 20 -E "^At line "
 
   exit 1 ; }
@@ -1829,7 +1830,7 @@ function build() {
     export PACKER_LOG_PATH="$BASE/logs/$1-`date +'%Y%m%d.%H.%M.%S'`.txt"
     packer.exe build -on-error=$PACKER_ON_ERROR -parallel-builds=$PACKER_MAX_PROCS -except="${EXCEPTIONS}" $1.json
   elif [[ "$1" =~ ^.*docker.*$ ]]; then
-    container-registry-login 
+    container-registry-login
     export PACKER_LOG_PATH="$BASE/logs/$1-`date +'%Y%m%d.%H.%M.%S'`.txt"
     env DOCKER_CONFIG=$HOME/.docker/ REGISTRY_AUTH_FILE=$HOME/.docker/config.json packer build -on-error=$PACKER_ON_ERROR -parallel-builds=$PACKER_MAX_PROCS -except="${EXCEPTIONS}" $1.json
     container-registry-logout
@@ -1887,14 +1888,14 @@ function box() {
 
   if [[ "$(uname)" == "Linux" ]]; then
 
-      
+
       export PACKER_LOG_PATH="$BASE/logs/generic-docker-x64-log-`date +'%Y%m%d.%H.%M.%S'`.txt"
       [[ "$1" =~ ^.*generic.*$ ]] && [[ "$1" =~ ^.*docker-x64.*$ ]] && (container-registry-login && env DOCKER_CONFIG=$HOME/.docker/ REGISTRY_AUTH_FILE=$HOME/.docker/config.json packer build -on-error=$PACKER_ON_ERROR -parallel-builds=$PACKER_MAX_PROCS -only=$1 generic-docker-x64.json; container-registry-logout)
       export PACKER_LOG_PATH="$BASE/logs/generic-libvirt-x64-log-`date +'%Y%m%d.%H.%M.%S'`.txt"
       [[ "$1" =~ ^.*generic.*$ ]] && [[ "$1" =~ ^.*libvirt-x64.*$ ]] && packer build -on-error=$PACKER_ON_ERROR -parallel-builds=$PACKER_MAX_PROCS -only=$1 generic-libvirt-x64.json
      export PACKER_LOG_PATH="$BASE/logs/generic-libvirt-x32-log-`date +'%Y%m%d.%H.%M.%S'`.txt"
       [[ "$1" =~ ^.*generic.*$ ]] && [[ "$1" =~ ^.*libvirt-x32.*$ ]] && packer build -on-error=$PACKER_ON_ERROR -parallel-builds=$PACKER_MAX_PROCS -only=$1 generic-libvirt-x32.json
-      
+
       export PACKER_LOG_PATH="$BASE/logs/generic-libvirt-a64-log-`date +'%Y%m%d.%H.%M.%S'`.txt"
       [[ "$1" =~ ^.*generic.*$ ]] && [[ "$1" =~ ^.*libvirt-a64.*$ ]] && packer build -on-error=$PACKER_ON_ERROR -parallel-builds=$PACKER_MAX_PROCS -only=$1 generic-libvirt-a64.json
       export PACKER_LOG_PATH="$BASE/logs/generic-libvirt-a32-log-`date +'%Y%m%d.%H.%M.%S'`.txt"
@@ -1953,12 +1954,12 @@ function links() {
     (verify_url "${UNIQURLS[$i]}") &
     sleep 0.1 &> /dev/null || echo "" &> /dev/null
   done
-  
+
   for ((i = 0; i < ${#REPOS[@]}; ++i)); do
     (verify_url "${REPOS[$i]}") &
     sleep 0.1 &> /dev/null || echo "" &> /dev/null
   done
-  
+
   for ((i = 0; i < ${#RESOURCES[@]}; ++i)); do
     (verify_url "${RESOURCES[$i]}") &
     sleep 0.1 &> /dev/null || echo "" &> /dev/null
@@ -1977,7 +1978,7 @@ function links() {
     grep --silent "${ISOURLS[$i]}" packer-cache-x64.json packer-cache-x32.json packer-cache-a64.json packer-cache-a32.json packer-cache-p64.json packer-cache-m64.json || \
     echo "Cache Failure:  ${ISOURLS[$i]}"
   done
-  
+
   # Check whether the a given URL is available and notify. The VirtualBox v6.1.36 guest additions are used as an example.
   # HTTPCODE=$(curl -Lso /dev/null --write-out "%{http_code}\n" "https://download.virtualbox.org/virtualbox/6.1.36/VBoxGuestAdditions_6.1.36.iso")
   # [ "$HTTPCODE" == "200" ] && echo "Release Notification:  https://download.virtualbox.org/virtualbox/6.1.36/VBoxGuestAdditions_6.1.36.iso"
@@ -2261,7 +2262,7 @@ function public() {
 
     # Remove all of the box names ending in alt
     LIST=(${LIST[@]/*alt/})
-    
+
     for ((i = 0; i < ${#LIST[@]}; ++i)); do
       ORGANIZATION=`echo ${LIST[$i]} | awk -F'/' '{print $1}'`
       BOX=`echo ${LIST[$i]} | awk -F'/' '{print $2}'`
@@ -2409,7 +2410,7 @@ function public() {
       #     fi
       #   fi
       # fi
-      
+
       PROVIDER="qemu" ; ARCH="ppc64le"
       if [[ "${ORGANIZATION}" =~ ^(generic(-p64)?|roboxes(-p64)?)$ ]]; then
         if [[ "${BOX}" =~ ^debian12$ ]]; then
@@ -2582,7 +2583,7 @@ function public() {
       #     fi
       #   fi
       # fi
-      
+
       PROVIDER="libvirt" ; ARCH="ppc64le"
       if [[ "${ORGANIZATION}" =~ ^(generic(-p64)?|roboxes(-p64)?)$ ]]; then
         if [[ "${BOX}" =~ ^debian12$ ]]; then
@@ -2830,7 +2831,7 @@ function invalid() {
 
     # Remove all of the box names ending in alt
     LIST=(${LIST[@]/*alt/})
-    
+
     for ((i = 0; i < ${#LIST[@]}; ++i)); do
       ORGANIZATION=`echo ${LIST[$i]} | awk -F'/' '{print $1}'`
       BOX=`echo ${LIST[$i]} | awk -F'/' '{print $2}'`
@@ -3150,7 +3151,7 @@ function container-registry-login() {
 
   # If jq is installed, we can use it to determine whether a login is required. Otherwise we rely on the more primitive login logic.
   if [ -f /usr/bin/jq ] || [ -f /usr/local/bin/jq ]; then
-    
+
     if [[ `jq "[ .auths.\"quay.io\" ]" $REGISTRY_AUTH_FILE | jq " .[] | length"` == 0 ]]; then
       ${DOCKER} login -u "$QUAY_USER" -p "$QUAY_PASSWORD" quay.io
       if [[ $? != 0 ]]; then
@@ -3190,14 +3191,14 @@ function container-registry-login() {
     if [ -d $HOME/.docker/ ] && [ -f $REGISTRY_AUTH_FILE ] && \
       [[ `jq "[ .auths.\"docker.io\" ]" $REGISTRY_AUTH_FILE | jq " .[] | length"` == 0 ]] && \
       [[ `jq "[ .auths.\"https://index.docker.io/v1/\" ]" $REGISTRY_AUTH_FILE | jq " .[] | length"` == 1 ]]; then
-      
+
       jq '.auths = {"docker.io":.auths."https://index.docker.io/v1/"} + .auths' $REGISTRY_AUTH_FILE > $REGISTRY_AUTH_FILE.new
       if [[ $? == 0 ]] && [[ `jq "[ .auths.\"docker.io\" ]" $REGISTRY_AUTH_FILE.new | jq " .[] | length"` == 1 ]]; then
         mv $REGISTRY_AUTH_FILE.new $REGISTRY_AUTH_FILE
       else
         rm -f  $REGISTRY_AUTH_FILE.new
       fi
-    
+
     else
 
       ${DOCKER} login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD" docker.io
@@ -3537,8 +3538,8 @@ elif [[ $1 == "list-providers" ]]; then list_providers
 elif [[ $1 == "list-configs" ]]; then list_configs
 
 # Login/logout aliases for the container registries.
-elif [[ $1 == "container-registry-login" || $1 == "registry-login" || $1 == "docker-login" || $1 == "podman-login" ]]; then container-registry-login 
-elif [[ $1 == "container-registry-logout" || $1 == "registry-logout" || $1 == "docker-logout" || $1 == "podman-logout" ]]; then container-registry-logout 
+elif [[ $1 == "container-registry-login" || $1 == "registry-login" || $1 == "docker-login" || $1 == "podman-login" ]]; then container-registry-login
+elif [[ $1 == "container-registry-logout" || $1 == "registry-logout" || $1 == "docker-logout" || $1 == "podman-logout" ]]; then container-registry-logout
 
 # The type functions.
 elif [[ $1 == "ova" ]]; then vmware

@@ -33,8 +33,8 @@ apt-get --assume-yes autoclean; error
 sed -i '/old-releases.ubuntu.com/d' /etc/hosts
 
 # Remove log files.
-[ -d /var/log/dist-upgrade/ ] && rm --recursive --force /var/log/dist-upgrade/ 
-[ -d /var/log/installer/ ] && rm --recursive --force /var/log/installer/ 
+[ -d /var/log/dist-upgrade/ ] && rm --recursive --force /var/log/dist-upgrade/
+[ -d /var/log/installer/ ] && rm --recursive --force /var/log/installer/
 
 [ -f /var/log/apt/eipp.log.xz ] && rm --force /var/log/apt/eipp.log.xz
 [ -f /var/log/cloud-init-output.log ] && rm --force /var/log/cloud-init-output.log
@@ -44,7 +44,7 @@ sed -i '/old-releases.ubuntu.com/d' /etc/hosts
 [ -f /var/log/dmesg.0 ] && rm --force /var/log/dmesg.0
 [ -f /var/log/dmesg ] && rm --force /var/log/dmesg
 
-[ -f /var/log/apt/history.log ] && truncate --size=0 truncate --size=0 /var/log/apt/history.log 
+[ -f /var/log/apt/history.log ] && truncate --size=0 truncate --size=0 /var/log/apt/history.log
 [ -f /var/log/apt/term.log ] && truncate --size=0 truncate --size=0 /var/log/apt/term.log
 [ -f /var/log/ubuntu-advantage-timer.log ] && truncate --size=0 truncate --size=0 /var/log/ubuntu-advantage-timer.log
 [ -f /var/log/ubuntu-advantage.log ] && truncate --size=0 truncate --size=0 /var/log/ubuntu-advantage.log
@@ -67,3 +67,4 @@ systemctl --quiet list-unit-files packagekit-offline-update.service &>/dev/null 
 
 systemctl --quiet list-unit-files snapd.service &>/dev/null && [ "$(systemctl is-enabled snapd.service)" == "masked" ] && systemctl unmask snapd.service
 systemctl --quiet list-unit-files snapd.socket &>/dev/null && [ "$(systemctl is-enabled snapd.socket)" == "disabled" ] && systemctl enable snapd.socket
+systemctl enable getty@ttyS0.service

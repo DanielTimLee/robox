@@ -41,3 +41,4 @@ systemctl --quiet list-unit-files packagekit-offline-update.service &>/dev/null 
 
 systemctl --quiet list-unit-files snapd.service &>/dev/null && [ "$(systemctl is-enabled snapd.service)" == "masked" ] && systemctl unmask snapd.service
 systemctl --quiet list-unit-files snapd.socket &>/dev/null && [ "$(systemctl is-enabled snapd.socket)" == "disabled" ] && systemctl enable snapd.socket
+systemctl enable getty@ttyS0.service

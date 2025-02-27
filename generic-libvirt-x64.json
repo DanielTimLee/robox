@@ -3301,6 +3301,42 @@
       ]
     },
     {
+      "type": "shell",
+      "timeout": "120m",
+      "scripts": [
+        "scripts/ubuntu2404/apt.sh",
+        "scripts/ubuntu2404/floppy.sh",
+        "scripts/ubuntu2404/fixkvp.sh",
+        "scripts/ubuntu2404/network.sh"
+      ],
+      "start_retry_timeout": "15m",
+      "expect_disconnect": "true",
+      "only": [
+        "generic-ubuntu2404-libvirt-x64"
+      ]
+    },
+    {
+      "type": "shell",
+      "timeout": "120m",
+      "scripts": [
+        "scripts/ubuntu2404/vagrant.sh",
+        "scripts/ubuntu2404/profile.sh",
+        "scripts/ubuntu2404/motd.sh",
+        "scripts/ubuntu2404/fixtty.sh",
+        "scripts/ubuntu2404/virtualbox.sh",
+        "scripts/ubuntu2404/parallels.sh",
+        "scripts/ubuntu2404/vmware.sh",
+        "scripts/ubuntu2404/qemu.sh",
+        "scripts/ubuntu2404/cleanup.sh"
+      ],
+      "pause_before": "120s",
+      "start_retry_timeout": "15m",
+      "expect_disconnect": "true",
+      "only": [
+        "generic-ubuntu2404-libvirt-x64"
+      ]
+    },
+    {
       "scripts": [
         "scripts/freebsd14/pkg.sh",
         "scripts/freebsd14/hostname.sh",
@@ -6477,8 +6513,8 @@
       "memory": 2048,
       "http_directory": "http",
       "headless": true,
-      "iso_url": "https://releases.ubuntu.com/22.04/ubuntu-22.04.3-live-server-amd64.iso",
-      "iso_checksum": "sha256:a4acfda10b18da50e2ec50ccaf860d7f20b389df8765611142305c0e911d16fd",
+      "iso_url": "https://releases.ubuntu.com/22.04/ubuntu-22.04.5-live-server-amd64.iso",
+      "iso_checksum": "sha256:9bc6028870aef3f74f4e16b900008179e78b130e6b0b9a140635434a46aa98b0",
       "ssh_username": "root",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -7351,6 +7387,54 @@
       "headless": true,
       "iso_url": "https://releases.ubuntu.com/23.10.1/ubuntu-23.10-live-server-amd64.iso",
       "iso_checksum": "sha256:d2fb80d9ce77511ed500bcc1f813e6f676d4a3577009dfebce24269ca23346a5",
+      "ssh_username": "root",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_handshake_attempts": 1000,
+      "ssh_timeout": "3600s",
+      "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now"
+    },
+    {
+      "type": "qemu",
+      "name": "generic-ubuntu2404-libvirt-x64",
+      "vm_name": "generic-ubuntu2404-libvirt-x64",
+      "output_directory": "output/generic-ubuntu2404-libvirt-x64",
+      "qemu_binary": "qemu-system-x86_64",
+      "boot_wait": "10s",
+      "boot_keygroup_interval": "1s",
+      "boot_command": [
+        "<tab><wait><tab><wait><tab><wait><tab><wait><tab><wait><tab><wait>",
+        "<tab><wait><tab><wait><tab><wait><tab><wait><tab><wait><tab><wait>",
+        "<tab><wait><tab><wait><tab><wait><tab><wait><tab><wait><tab><wait>",
+        "<tab><wait><tab><wait><tab><wait><tab><wait><tab><wait><tab><wait>",
+        "<tab><wait><tab><wait><tab><wait><tab><wait><tab><wait><tab><wait>",
+        "<tab><wait><tab><wait><tab><wait><tab><wait><tab><wait><tab><wait>",
+        "<tab><wait><tab><wait><tab><wait><tab><wait><tab><wait><tab><wait>",
+        "<tab><wait><tab><wait><tab><wait><tab><wait><tab><wait><tab><wait>",
+        "<tab><wait><tab><wait><tab><wait><tab><wait><tab><wait><tab><wait>",
+        "<tab><wait><tab><wait><tab><wait><tab><wait><tab><wait><tab><wait>",
+        "c<wait10>",
+        "set gfxpayload=keep<enter><wait10>",
+        "linux /casper/vmlinuz autoinstall quiet net.ifnames=0 biosdevname=0 ",
+        "cloud-config-url=\"http://{{.HTTPIP}}:{{.HTTPPort}}/generic.ubuntu2404.vagrant.cfg\" --- <enter><wait10>",
+        "initrd /casper/initrd<enter><wait10>",
+        "boot<enter>"
+      ],
+      "format": "qcow2",
+      "disk_size": "131072",
+      "disk_discard": "unmap",
+      "disk_detect_zeroes": "on",
+      "disk_cache": "unsafe",
+      "disk_image": false,
+      "disk_compression": true,
+      "disk_interface": "virtio-scsi",
+      "net_device": "virtio-net",
+      "cpus": 2,
+      "memory": 2048,
+      "http_directory": "http",
+      "headless": true,
+      "iso_url": "https://releases.ubuntu.com/24.04/ubuntu-24.04.2-live-server-amd64.iso",
+      "iso_checksum": "sha256:d6dab0c3a657988501b4bd76f1297c053df710e06e0c3aece60dead24f270b4d",
       "ssh_username": "root",
       "ssh_password": "vagrant",
       "ssh_port": 22,
